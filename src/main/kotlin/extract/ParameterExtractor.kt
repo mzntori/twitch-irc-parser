@@ -26,8 +26,10 @@ class ParameterExtractor(override val msg: IRCMessage) : Extractor<ParameterExtr
                 }
             }
             ParameterType.Channel -> return msg.parameters.findLast {
-                it.startsWith(":")
-            }?.substring(1)?.toExtraction()
+                it.startsWith("#")
+            }?.substring(1)?.toExtraction() ?: msg.parameters.findLast {
+                it == "*"
+            }?.toExtraction()
         }
     }
 

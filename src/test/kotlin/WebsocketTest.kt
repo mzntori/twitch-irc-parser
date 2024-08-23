@@ -2,6 +2,7 @@ import msg.PingMessage
 import okhttp3.*
 
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.typeOf
 
 fun main() {
     val client: OkHttpClient = OkHttpClient.Builder()
@@ -30,15 +31,13 @@ class WebSocketTwitch() : WebSocketListener() {
         val messagesRaw = text.split("\r\n")
 
         for (messageRaw in messagesRaw) {
-            val parsedMessage = parser.parse(messageRaw)?.promote()
-
-            println(parsedMessage?.toString())
-            println(parsedMessage?.raw)
+            val parsedMessage = parser.parse(messageRaw) ?: continue
+            println(parsedMessage.raw)
+            val promotedMessage = parsedMessage.promoteThrowing()
 
             if (parsedMessage is PingMessage) {
                 val pong = parsedMessage.generatePong()
                 webSocket.send(pong)
-                println(pong)
             }
         }
     }

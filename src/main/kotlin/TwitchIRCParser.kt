@@ -54,9 +54,12 @@ open class TwitchIRCParser() {
                     }
                 }
 
-                State.Tag -> state = when (c) {
+                State.Tag -> when (c) {
                     '\n', '\r', '\u0000' -> return null
-                    else -> State.Key
+                    else -> {
+                        buffer.append(c)
+                        state = State.Key
+                    }
                 }
 
                 State.Key -> when (c) {
