@@ -56,12 +56,12 @@ class PrivMsgMessage(msg: IRCMessage) : IRCMessage(
     val formattedClientNonce: String? = msg
         .extractTag()
         .optional("client-nonce")
-        ?.asFormattedStringOrNull()
+        ?.asFormattedString()
 
     val senderDisplayName: String = msg
         .extractTag()
-        .require("display-name")
-        .asString()
+        .optional("display-name")
+        ?.asFormattedString() ?: senderUsername
 
     val isEmoteOnly: Boolean = msg
         .extractTag()
@@ -159,7 +159,7 @@ class PrivMsgMessage(msg: IRCMessage) : IRCMessage(
     val parentMessageText: String? = msg
         .extractTag()
         .optional("reply-parent-msg-body")
-        ?.asFormattedStringOrNull()
+        ?.asFormattedString()
 
     val threadRootMessageID: String? = msg
         .extractTag()

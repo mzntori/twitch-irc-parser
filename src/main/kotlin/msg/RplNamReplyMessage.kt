@@ -24,7 +24,7 @@ class RplNamReplyMessage(msg: IRCMessage) : IRCMessage(
         .require(ParameterExtractor.ParameterType.Channel)
         .asString()
 
-    val joinedUsers: List<String> = msg
+    val chatters: List<String> = msg
         .extractParameter()
         .require(ParameterExtractor.ParameterType.Text)
         .asStringList(" ")

@@ -33,5 +33,22 @@ class RoomStateMessage(msg: IRCMessage) : IRCMessage(
         this > -1
     }
 
-    // TODO
+    val isUniqueChat: Boolean? = msg
+        .extractTag()
+        .optional("r9k")
+        ?.asBooleanOrNull()
+
+    val slowModeCooldown: Int? = msg
+        .extractTag()
+        .optional("slow")
+        ?.asIntOrNull()
+
+    val isSlowMode: Boolean? = slowModeCooldown?.run {
+        this > 0
+    }
+
+    val isSubscriberOnly: Boolean? = msg
+        .extractTag()
+        .optional("subs-only")
+        ?.asBooleanOrNull()
 }

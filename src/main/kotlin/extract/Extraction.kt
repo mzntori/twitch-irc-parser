@@ -5,6 +5,7 @@ import data.UserType
 import data.toColorFromHexOrNull
 import exceptions.ConvertionException
 import msg.NoticeMessage
+import msg.UserNoticeMessage
 import java.time.Instant
 
 class Extraction(private val value: String) {
@@ -28,16 +29,8 @@ class Extraction(private val value: String) {
      * @return a formatted version of the extracted string.
      * Needed for strings with spaces or semicolons in them.
      */
-    fun asFormattedStringOrNull(): String? {
-        return formatString(value)
-    }
-
-    /**
-     * @return a formatted version of the extracted string.
-     * @throws ConvertionException if string couldn't be formatted.
-     */
     fun asFormattedString(): String {
-        return formatString(value) ?: throw ConvertionException("Could not format string.")
+        return formatString(value)
     }
 
     /**
@@ -180,6 +173,25 @@ class Extraction(private val value: String) {
         }
     }
 
+    fun asUserNoticeType(): UserNoticeMessage.UserNoticeType {
+        return when (value) {
+            "sub" -> UserNoticeMessage.UserNoticeType.Sub
+            "resub" -> UserNoticeMessage.UserNoticeType.Resub
+            "subgift" -> UserNoticeMessage.UserNoticeType.Subgift
+            "submysterygift" -> UserNoticeMessage.UserNoticeType.SubMysteryGift
+            "giftpaidupgrade" -> UserNoticeMessage.UserNoticeType.GiftPaidUpgrade
+            "rewardgift" -> UserNoticeMessage.UserNoticeType.RewardGift
+            "anongiftpaidupgrade" -> UserNoticeMessage.UserNoticeType.AnonGiftPaidUpgrade
+            "raid" -> UserNoticeMessage.UserNoticeType.Raid
+            "unraid" -> UserNoticeMessage.UserNoticeType.Unraid
+            "bitsbadgetier" -> UserNoticeMessage.UserNoticeType.BitsBadgeTier
+            "standardpayforward" -> UserNoticeMessage.UserNoticeType.StandardPayForward
+            "announcement" -> UserNoticeMessage.UserNoticeType.Announcement
+
+            else -> UserNoticeMessage.UserNoticeType.Other
+        }
+    }
+
     fun asNoticeType(): NoticeMessage.NoticeType {
         return when (value) {
             "emote_only_off" -> NoticeMessage.NoticeType.EmoteOnlyOff
@@ -216,7 +228,7 @@ class Extraction(private val value: String) {
         }
     }
 
-    private fun formatString(raw: String): String? {
+    private fun formatString(raw: String): String {
         val result = StringBuilder()
         var state = StringFormatState.Text
 
@@ -233,7 +245,7 @@ class Extraction(private val value: String) {
                         '\\' -> result.append('\\')
                         's' -> result.append(' ')
                         ':' -> result.append(';')
-                        else -> return null
+                        else -> result.append(c)
                     }
 
                     state = StringFormatState.Text
