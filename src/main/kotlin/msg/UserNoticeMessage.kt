@@ -9,7 +9,7 @@ class UserNoticeMessage(msg: IRCMessage) : IRCMessage(
     command = msg.command,
     parameters = msg.parameters
 ) {
-    val messageText: String? = msg
+    val userMessageText: String? = msg
         .extractParameter()
         .optional(ParameterExtractor.ParameterType.Text)
         ?.asString()
@@ -23,6 +23,11 @@ class UserNoticeMessage(msg: IRCMessage) : IRCMessage(
         .extractTag()
         .require("msg-id")
         .asUserNoticeType()
+
+    val systemMessage: String = msg
+        .extractTag()
+        .require("system-msg")
+        .asFormattedString()
 
     enum class UserNoticeType {
         Sub,

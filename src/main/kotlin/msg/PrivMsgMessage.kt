@@ -143,7 +143,7 @@ class PrivMsgMessage(msg: IRCMessage) : IRCMessage(
 
     val parentMessageUserID: Int? = msg
         .extractTag()
-        .optional("reply-parent-user-ud")
+        .optional("reply-parent-user-id")
         ?.asIntOrNull()
 
     val parentMessageUsername: String? = msg

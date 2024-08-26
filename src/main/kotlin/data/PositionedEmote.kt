@@ -51,7 +51,7 @@ fun String.toPositionedEmote(): PositionedEmote {
         id = idBuffer.toString(),
         positions = rangeStrings.mapNotNull {
             val from: Int = it.first.toIntOrNull() ?: return@mapNotNull null
-            val to: Int = it.first.toIntOrNull() ?: return@mapNotNull null
+            val to: Int = it.second.toIntOrNull() ?: return@mapNotNull null
 
             from..to
         },

@@ -38,7 +38,32 @@ open class IRCMessage(
      *
      * @return The specific type message (extending [IRCMessage]).
      * If promotion fails the object will be returned.
-     * If you want to catch the error yourself consider using [promoteThrowing]
+     * If you want to catch the error yourself consider using [promoteThrowing].
+     *
+     * The type of message is read from the [command] field and is mapped the following way:
+     *
+     * - `001` -> [RplWelcomeMessage]
+     * - `002` -> [RplYourHostMessage]
+     * - `003` -> [RplCreatedMessage]
+     * - `004` -> [RplMyInfoMessage]
+     * - `353` -> [RplNamReplyMessage]
+     * - `366` -> [RplEndOfNamesMessage]
+     * - `372` -> [RplMotdMessage]
+     * - `375` -> [RplMotdStartMessage]
+     * - `376` -> [RplEnddOfMotdMessage]
+     * - `CAP` -> [CapMessage]
+     * - `CLEARCHAT` -> [ClearChatMessage]
+     * - `CLEARMSG` -> [ClearMsgMessage]
+     * - `JOIN` -> [JoinMessage]
+     * - `NOTICE` -> [NoticeMessage]
+     * - `PART` -> [PartMessage]
+     * - `PING` -> [PingMessage]
+     * - `PONG` -> [PongMessage]
+     * - `PRIVMSG` -> [PrivMsgMessage]
+     * - `ROOMSTATE` -> [RoomStateMessage]
+     * - `USERNOTICE` -> [UserNoticeMessage]
+     * - `USERSTATE` -> [UserStateMessage]
+     * - `WHISPER` -> [WhisperMessage]
      */
     fun promote(): IRCMessage {
         return kotlin.runCatching {

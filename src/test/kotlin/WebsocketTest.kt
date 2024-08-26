@@ -1,8 +1,12 @@
 import msg.PingMessage
+import msg.PrivMsgMessage
+import msg.UserNoticeMessage
 import okhttp3.*
 
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.typeOf
+
+var msgCounter = 0
 
 fun main() {
     val client: OkHttpClient = OkHttpClient.Builder()
@@ -23,7 +27,7 @@ class WebSocketTwitch() : WebSocketListener() {
         webSocket.send("PASS hello")
         webSocket.send("NICK justinfan1222")
         webSocket.send("CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands")
-        webSocket.send("JOIN #gaygebot,#mzntori")
+        webSocket.send("JOIN #gaygebot,#mzntori,#tmiloadtesting3,#twitchmedia_qs_10")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
@@ -31,9 +35,23 @@ class WebSocketTwitch() : WebSocketListener() {
         val messagesRaw = text.split("\r\n")
 
         for (messageRaw in messagesRaw) {
+            msgCounter++
+
+            if (msgCounter % 100  == 0) {
+                println("$msgCounter")
+            }
+
             val parsedMessage = parser.parse(messageRaw) ?: continue
-            println(parsedMessage.raw)
+//            println(parsedMessage.raw)
             val promotedMessage = parsedMessage.promoteThrowing()
+
+
+
+            if (promotedMessage is PrivMsgMessage && promotedMessage.bits  != null) {
+                println(promotedMessage.bits)
+            } else if (promotedMessage is UserNoticeMessage) {
+                println(promotedMessage.noticeType)
+            }
 
             if (parsedMessage is PingMessage) {
                 val pong = parsedMessage.generatePong()

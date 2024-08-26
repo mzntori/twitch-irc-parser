@@ -1,18 +1,19 @@
 package data
 
 data class Color(
-    val red: Byte,
-    val green: Byte,
-    val blue: Byte
+    val red: UByte,
+    val green: UByte,
+    val blue: UByte
 )
 
 fun String.toColorFromHexOrNull(): Color? {
-    val bytes: List<Byte> = this.removePrefix("#").run {
-        if (length != 6) return null
-        this
-    }.windowed(2, 2).mapNotNull {
-        it.toByteOrNull(radix = 16)
-    }
+    val noPrefix = this.removePrefix("#")
+
+    if (noPrefix.length != 6) return null
+
+    val windows = noPrefix.lowercase().windowed(2, 2)
+
+    val bytes: List<UByte> = windows.mapNotNull { it.toUByteOrNull(radix = 16) }
 
     if (bytes.size != 3) return null
 
