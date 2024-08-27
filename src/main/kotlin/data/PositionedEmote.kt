@@ -11,13 +11,18 @@ private enum class States {
     End
 }
 
-fun String.toPositionedEmote(): PositionedEmote {
-    var state = States.ID
+private var state = States.ID
+private val idBuffer = StringBuilder()
+private val startBuffer = StringBuilder()
+private val endBuffer = StringBuilder()
+private val rangeStrings: MutableList<Pair<String, String>> = mutableListOf()
 
-    val idBuffer = StringBuilder()
-    val startBuffer = StringBuilder()
-    val endBuffer = StringBuilder()
-    val rangeStrings: MutableList<Pair<String, String>> = mutableListOf()
+fun String.toPositionedEmote(): PositionedEmote {
+    state = States.ID
+    idBuffer.clear()
+    startBuffer.clear()
+    endBuffer.clear()
+    rangeStrings.clear()
 
     for (c in this) {
         when (state) {

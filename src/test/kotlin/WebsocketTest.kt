@@ -27,25 +27,23 @@ class WebSocketTwitch() : WebSocketListener() {
         webSocket.send("PASS hello")
         webSocket.send("NICK justinfan1222")
         webSocket.send("CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands")
-        webSocket.send("JOIN #gaygebot,#mzntori,#tmiloadtesting3,#twitchmedia_qs_10")
+        webSocket.send("JOIN #gaygebot,#mzntori,#trickywi")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         val parser = TwitchIRCParser()
-        val messagesRaw = text.split("\r\n")
+        val messagesRaw = text.trim().split("\r\n")
 
         for (messageRaw in messagesRaw) {
-            msgCounter++
+            val parsedMessage = parser.parse(messageRaw) ?: continue
+            val promotedMessage = parsedMessage.promoteThrowing()
 
+            println(promotedMessage.javaClass.name)
+
+            msgCounter++
             if (msgCounter % 100  == 0) {
                 println("$msgCounter")
             }
-
-            val parsedMessage = parser.parse(messageRaw) ?: continue
-//            println(parsedMessage.raw)
-            val promotedMessage = parsedMessage.promoteThrowing()
-
-
 
             if (promotedMessage is PrivMsgMessage && promotedMessage.bits  != null) {
                 println(promotedMessage.bits)

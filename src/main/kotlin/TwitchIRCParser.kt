@@ -2,7 +2,7 @@ import data.toPrefix
 import msg.IRCMessage
 
 open class TwitchIRCParser() {
-    enum class State {
+    private enum class State {
         Start,
         Tag,
         Key,
@@ -15,6 +15,14 @@ open class TwitchIRCParser() {
         Text
     }
 
+    private val command = StringBuilder()
+    private val prefix = StringBuilder()
+    private val buffer = StringBuilder()
+    private val tags: HashMap<String, String> = HashMap()
+    private val parameters: MutableList<String> = mutableListOf()
+    private var keyBuffer: String = ""
+    private var state: State = State.Start
+
     /**
      * Parses a single IRC message from Twitch and returns the result.
      * If the given string has multiple IRC messages seperated by `\r\n` only parses the first one.
@@ -26,16 +34,16 @@ open class TwitchIRCParser() {
     fun parse(text: String): IRCMessage? {
         if (text.isBlank()) return null
 
-        var state: State = State.Start
+        state = State.Start
 
-        val command = StringBuilder()
-        val prefix = StringBuilder()
-        val buffer = StringBuilder()
+        command.clear()
+        prefix.clear()
+        buffer.clear()
 
-        val tags: HashMap<String, String> = HashMap()
-        val parameters: MutableList<String> = mutableListOf()
+        tags.clear()
+        parameters.clear()
 
-        var keyBuffer: String = ""
+        keyBuffer = ""
 
         for (c in text) {
             when (state) {
