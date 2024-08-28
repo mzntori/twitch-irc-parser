@@ -1,3 +1,4 @@
+import twitchIrcParser.TwitchIRCParser
 import msg.PingMessage
 import msg.PrivMsgMessage
 import msg.UserNoticeMessage
@@ -27,7 +28,7 @@ class WebSocketTwitch() : WebSocketListener() {
         webSocket.send("PASS hello")
         webSocket.send("NICK justinfan1222")
         webSocket.send("CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands")
-        webSocket.send("JOIN #gaygebot,#mzntori,#trickywi")
+        webSocket.send("JOIN #forsen")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
