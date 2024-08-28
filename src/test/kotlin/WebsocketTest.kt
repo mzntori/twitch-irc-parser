@@ -5,7 +5,6 @@ import msg.UserNoticeMessage
 import okhttp3.*
 
 import java.util.concurrent.TimeUnit
-import kotlin.reflect.typeOf
 
 var msgCounter = 0
 

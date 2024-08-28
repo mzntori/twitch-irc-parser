@@ -1,5 +1,3 @@
-import org.gradle.api.tasks.bundling.Jar
-
 plugins {
     kotlin("jvm") version "2.0.0"
     `java-library`
