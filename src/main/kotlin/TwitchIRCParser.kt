@@ -1,3 +1,5 @@
+package twitchIrcParser
+
 import data.toPrefix
 import msg.IRCMessage
 
